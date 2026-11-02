@@ -64,6 +64,15 @@ def hours_html():
     rows = "".join(f"<li><span>{d}</span><span dir='ltr'>{h}</span></li>" for d, h in HOURS)
     return rows + f'<li class="note">{KITCHEN_NOTE}</li>'
 
+import hashlib
+def _asset_version():
+    h = hashlib.md5()
+    for f in ("assets/style.css", "assets/site.js"):
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f), "rb") as fh:
+            h.update(fh.read())
+    return h.hexdigest()[:8]
+ASSET_V = _asset_version()  # changes whenever CSS/JS change, so browsers fetch the new files
+
 def page(path, title, body, desc="ברד אנד ברקפסט רעננה – בית למפגש, קפה וארוחות בוקר. כשר למהדרין."):
     nav = "".join(
         f'<li><a href="{h}"{ext(h)}{" aria-current=\"page\"" if h == path else ""}>{t}</a></li>' for h, t in NAV)
@@ -80,7 +89,7 @@ def page(path, title, body, desc="ברד אנד ברקפסט רעננה – בי
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v={ASSET_V}">
 </head>
 <body>
 <a class="skip" href="#main">דילוג לתוכן</a>
@@ -143,7 +152,7 @@ def page(path, title, body, desc="ברד אנד ברקפסט רעננה – בי
   <button data-a11y="reset">איפוס</button>
   <a href="/accessibility/">הצהרת נגישות</a>
 </div>
-<script src="/assets/site.js" defer></script>
+<script src="/assets/site.js?v={ASSET_V}" defer></script>
 </body>
 </html>
 """
