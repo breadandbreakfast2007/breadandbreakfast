@@ -156,6 +156,12 @@ def page(path, title, body, desc="ברד אנד ברקפסט רעננה – בי
     with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
         f.write(html)
 
+# Form submissions go by email through FormSubmit (formsubmit.co). The first
+# submission sends an activation email to FORM_TO that must be confirmed once.
+FORM_TO = "breadandbrekfast2007@gmail.com"
+FORM_CC = "asaf021@gmail.com"
+FORM_NAMES = {"event": "אירועים", "company": "ליווי עסקי", "jobs": "דרושים", "contact": "צרו קשר"}
+
 def form(fields, form_id):
     rows = []
     for name, label, typ in fields:
@@ -172,9 +178,11 @@ def form(fields, form_id):
         else:
             ctrl = f'<input id="{fid}" name="{label}" type="{typ}"{req}>'
         rows.append(f'<div class="field"><label for="{fid}">{label}</label>{ctrl}</div>')
-    return f"""<form class="lead-form" data-form="{form_id}" method="post" action="https://api.web3forms.com/submit">
-  <input type="hidden" name="access_key" value="WEB3FORMS_KEY">
-  <input type="hidden" name="subject" value="פנייה מהאתר: {form_id}">
+    return f"""<form class="lead-form" data-form="{form_id}" method="post" action="https://formsubmit.co/ajax/{FORM_TO}">
+  <input type="hidden" name="_subject" value="פנייה מהאתר: {FORM_NAMES.get(form_id, form_id)}">
+  <input type="hidden" name="_cc" value="{FORM_CC}">
+  <input type="hidden" name="_template" value="table">
+  <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
   {''.join(rows)}
   <label class="check"><input type="checkbox" name="עדכונים" value="כן"> אשמח לקבל עדכון על הטבות מיוחדות לפרטי ההתקשרות שמסרתי</label>
   <label class="check"><input type="checkbox" required> אני מאשר/ת את <a href="/terms/">תקנון</a> ו<a href="/privacy/">מדיניות פרטיות</a></label>

@@ -28,7 +28,7 @@
   document.querySelectorAll('.lead-form').forEach(function(f){f.addEventListener('submit',function(e){
     e.preventDefault();var ok=f.querySelector('.form-ok'),b=f.querySelector('[type=submit]');b.disabled=true;
     fetch(f.action,{method:'POST',body:new FormData(f),headers:{Accept:'application/json'}})
-      .then(function(r){return r.json()}).then(function(j){if(!j.success)throw 0;f.reset();ok.textContent='ההודעה נשלחה בהצלחה !';ok.hidden=false})
+      .then(function(r){return r.json()}).then(function(j){if(!(j.success===true||j.success==='true'))throw 0;f.reset();ok.textContent='ההודעה נשלחה בהצלחה !';ok.hidden=false})
       .catch(function(){ok.textContent='השליחה נכשלה. אפשר להתקשר אלינו: 09-772-8340';ok.hidden=false})
       .finally(function(){b.disabled=false});
   })});
