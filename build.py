@@ -349,10 +349,12 @@ page("/accessibility/", "הצהרת נגישות | ברד אנד ברקפסט ר
 <p class="muted">עודכן לאחרונה: נובמבר 2026</p>
 </div></section>
 """)
-for p, t in [("/privacy/", "מדיניות פרטיות"), ("/terms/", "תקנון")]:
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from legal import PRIVACY, TERMS
+for p, t, txt in [("/privacy/", "מדיניות פרטיות", PRIVACY), ("/terms/", "תקנון", TERMS)]:
     page(p, f"{t} | ברד אנד ברקפסט רעננה", f"""
 <section class="band page-head"><div class="wrap"><h1>{t}</h1></div></section>
-<section class="band"><div class="wrap prose"><p class="todo">[טקסט {t} – להעתיק מהאתר הקיים / לנסח לפני העלייה לאוויר]</p></div></section>
+<section class="band"><div class="wrap prose">{txt}</div></section>
 """)
 
 with open(os.path.join(OUT, "images.json"), "w", encoding="utf-8") as f:
