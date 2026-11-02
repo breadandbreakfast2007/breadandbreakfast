@@ -150,3 +150,4 @@ html.a11y-motion *,html.a11y-motion *::before{animation:none!important;transitio
 .hours li.note{display:block;border:0;font-size:.9rem;opacity:.85;padding-top:.4rem}
 .form-ok{background:#e8f5ec;color:#1d6b35;padding:.5em .8em}
 .form-ok.bad{background:#fde8e6;color:#b3261e}
+.form-ok .tel{font-family:Arial,sans-serif;color:inherit;font-weight:700;text-decoration:underline;unicode-bidi:isolate}
