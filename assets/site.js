@@ -24,12 +24,20 @@
     else if(a==='font-down')st.font=Math.max((st.font||100)-10,80);
     else if(a==='reset')st={};else st[a]=!st[a];apply()});
   apply();
-  // forms: submit via fetch (Web3Forms), show success text
-  document.querySelectorAll('.lead-form').forEach(function(f){f.addEventListener('submit',function(e){
-    e.preventDefault();var ok=f.querySelector('.form-ok'),b=f.querySelector('[type=submit]');b.disabled=true;
-    fetch(f.action,{method:'POST',body:new FormData(f),headers:{Accept:'application/json'}})
-      .then(function(r){return r.json()}).then(function(j){if(!(j.success===true||j.success==='true'))throw 0;f.reset();ok.textContent='ההודעה נשלחה בהצלחה !';ok.hidden=false})
-      .catch(function(){ok.textContent='השליחה נכשלה. אפשר להתקשר אלינו: 09-772-8340';ok.hidden=false})
-      .finally(function(){b.disabled=false});
-  })});
+  // forms: browser checks required fields, then we send by fetch (FormSubmit) and show the result
+  document.querySelectorAll('.lead-form').forEach(function(f){
+    var ok=f.querySelector('.form-ok'),b=f.querySelector('[type=submit]');
+    function say(t,bad){ok.textContent=t;ok.classList.toggle('bad',!!bad);ok.hidden=false;ok.scrollIntoView({block:'nearest'})}
+    f.addEventListener('invalid',function(){say('נא למלא את השדות המסומנים ולסמן אישור לתקנון ולמדיניות הפרטיות',true)},true);
+    f.addEventListener('submit',function(e){
+      e.preventDefault();b.disabled=true;var label=b.textContent;b.textContent='שולח...';ok.hidden=true;
+      fetch(f.action,{method:'POST',body:new FormData(f),headers:{Accept:'application/json'}})
+        .then(function(r){return r.json()}).then(function(j){
+          if(j.success===true||j.success==='true'){f.reset();say('ההודעה נשלחה בהצלחה !');return}
+          if(/activat/i.test(j.message||'')){say('הטופס ממתין להפעלה: נשלח מייל אישור לכתובת של העסק');return}
+          throw 0})
+        .catch(function(){say('השליחה נכשלה. אפשר להתקשר אלינו: 09-772-8340',true)})
+        .finally(function(){b.disabled=false;b.textContent=label});
+    });
+  });
 })();

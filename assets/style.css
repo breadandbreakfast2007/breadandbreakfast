@@ -146,3 +146,5 @@ html.a11y-motion .hero-slides span{animation:none!important}
 html.a11y-motion *,html.a11y-motion *::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 .hours li.note{display:block;border:0;font-size:.9rem;opacity:.85;padding-top:.4rem}
+.form-ok{background:#e8f5ec;color:#1d6b35;padding:.5em .8em}
+.form-ok.bad{background:#fde8e6;color:#b3261e}
